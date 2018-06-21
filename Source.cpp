@@ -29,37 +29,37 @@
 //------------------------------------------------------------
 // 設定パラメータ 実験時にこの部分を書き換える
 //------------------------------------------------------------
-#define MaxPsize		30					//最大個体数
-#define MaxGsize		10					//最大次元数（問題の次元数）
-#define FuncNo			1					//最適化問題の種類
-#define RANGE			5.12				//最適化問題の定義域
-#define Mrate			0.9					//突然変異率
-#define Crate			0.6					//交叉率
+#define MaxPsize			30				//最大個体数
+#define MaxGsize			10				//最大次元数（問題の次元数）
+#define FuncNo				1				//最適化問題の種類
+#define RANGE				5.12			//最適化問題の定義域
+#define Mrate				0.9			//突然変異率
+#define Crate					0.6			//交叉率
 #define MaxGeneration	100			//最大繰り返し回数
-#define DEalgorithmNo	1					//DEのアルゴリズム
-#define ExTime			20					//試行回数
-#define Terminate		1.0e-6				//終了条件
+#define DEalgorithmNo	1				//DEのアルゴリズム
+#define ExTime				20				//試行回数
+#define Terminate			1.0e-6		//終了条件
 //------------------------------------------------------------
-double cVect[MaxPsize][MaxGsize];			//時刻Tの個体（ベクトル）
-double cFitness[MaxPsize];					//時刻Tの個体の評価値
+double cVect[MaxPsize][MaxGsize];					//時刻Tの個体（ベクトル）
+double cFitness[MaxPsize];								//時刻Tの個体の評価値
 double pBestVector[MaxPsize][MaxGsize];		//時刻Tにおける各個体の最良解の履歴
-double pBestFitness[MaxPsize];				//時刻Tにおける各個体の最良解評価値の履歴
-double gBestVector[MaxGsize];				//時刻Tにおける集団全体での最良解の履歴
-double gBestFitness;						//時刻Tにおける集団全体での最良解評価値の履歴
+double pBestFitness[MaxPsize];			//時刻Tにおける各個体の最良解評価値の履歴
+double gBestVector[MaxGsize];			//時刻Tにおける集団全体での最良解の履歴
+double gBestFitness;							//時刻Tにおける集団全体での最良解評価値の履歴
 double pVect1[MaxGsize];					//親ベクトル１
 double pVect2[MaxGsize];					//親ベクトル２
 double pVect3[MaxGsize];					//親ベクトル３
-double nVect[MaxPsize][MaxGsize];			//時刻T+1の個体（ベクトル）
+double nVect[MaxPsize][MaxGsize];		//時刻T+1の個体（ベクトル）
 double nFitness[MaxPsize];					//時刻T+1の個体の評価値
 double gBestHistory[ExTime][MaxGeneration];	//各試行におけるgBestの履歴
-double pDiversity[ExTime][MaxGeneration];	//各試行における集団の多様性
-int gTable[ExTime];						//最適解発見時の世代数
+double pDiversity[ExTime][MaxGeneration];		//各試行における集団の多様性
+int gTable[ExTime];					//最適解発見時の世代数
 int sRate[ExTime];						//最適解の発見率
-double gBestTable[ExTime];					//終了時点でのgBestの値
-											//------------------------------------------------------------
-											//------------------------------------------------------------
-											// [min, max]の一様乱数
-											//------------------------------------------------------------
+double gBestTable[ExTime];		//終了時点でのgBestの値
+//------------------------------------------------------------
+//------------------------------------------------------------
+// [min, max]の一様乱数
+//------------------------------------------------------------
 double uniform(double min, double max) {
 	return min + (max - min)*genrand_real1();
 }
@@ -76,10 +76,9 @@ double Sphere(double *x) {
 	}
 	return sum;
 }
-//------------------------------------------------------------
+
 // F2 Rosenbrock関数 Chain型
 // [-2.048, +2.048] x=(1,..,1) F2=0 
-//------------------------------------------------------------
 double Rosenbrock(double *x) {
 	int i;
 	double sum = 0.0;
@@ -95,9 +94,8 @@ double Rosenbrock(double *x) {
 	}
 	return sum;
 }
-//------------------------------------------------------------
+
 // F3 Rastrigin関数
-//------------------------------------------------------------
 double Rastrigin(double *x) {
 	int i;
 	double sum1 = 0, sum2 = 0;
@@ -106,9 +104,8 @@ double Rastrigin(double *x) {
 	}
 	return (10 * MaxGsize + sum1);
 }
-//------------------------------------------------------------
+
 // F4 Griewank関数
-//------------------------------------------------------------
 double Griewank(double *x) {
 	int i;
 	double sum1 = 0.0, sum2 = 1.0;
@@ -118,9 +115,8 @@ double Griewank(double *x) {
 	}
 	return ((sum1 / 4000) - sum2 + 1);
 }
-//------------------------------------------------------------
+
 // F5 Ackley関数
-//------------------------------------------------------------
 double Ackley(double *x) {
 	int i;
 	double sum1, sum2;
@@ -128,9 +124,8 @@ double Ackley(double *x) {
 	for (i = 0, sum2 = 0.0; i<MaxGsize; i++)sum2 += cos(2.0*M_PI*MaxGsize);
 	return (20.0 + M_E - 20.0 * exp(-0.2*sqrt(sum1 / MaxGsize)) - exp(sum2 / MaxGsize));
 }
-//------------------------------------------------------------
+
 // F6 Schwefel関数
-//------------------------------------------------------------
 double Schwefel(double *x) {
 	int i;
 	double sum;
@@ -139,9 +134,8 @@ double Schwefel(double *x) {
 	}
 	return (sum + 418.9828872724338 * MaxGsize);
 }
-//------------------------------------------------------------
+
 // F7 Ridge関数
-//------------------------------------------------------------
 double Ridge(double *x) {
 	int i, j;
 	double sum1, sum2;
@@ -153,9 +147,8 @@ double Ridge(double *x) {
 	}
 	return sum1;
 }
-//------------------------------------------------------------
+
 // F8 Bohachevsky関数
-//------------------------------------------------------------
 double Bohachevsky(double *x) {
 	int i;
 	double sum;
@@ -164,9 +157,8 @@ double Bohachevsky(double *x) {
 	}
 	return sum;
 }
-//------------------------------------------------------------
+
 // F9 Schaffer関数
-//------------------------------------------------------------
 double Schaffer(double *x) {
 	int i;
 	double tp1 = 0, tp2 = 0, tp3 = 0, tp4 = 0, tp5 = 0;
@@ -179,9 +171,8 @@ double Schaffer(double *x) {
 	}
 	return tp5;
 }
-//------------------------------------------------------------
+
 // F10 Ellipsoid関数
-//------------------------------------------------------------
 double Ellipsoid(double *x) {
 	int i;
 	double sum;
@@ -190,9 +181,8 @@ double Ellipsoid(double *x) {
 	}
 	return sum;
 }
-//------------------------------------------------------------
+
 // F11 k-tablet関数
-//------------------------------------------------------------
 double K_Tablet(double *x) {
 	int i;
 	double sum1, sum2;
@@ -204,9 +194,8 @@ double K_Tablet(double *x) {
 	}
 	return (sum1 + sum2);
 }
-//------------------------------------------------------------
+
 // F12 Shifted-Rastrigin関数
-//------------------------------------------------------------
 double Shifted_Rastrigin(double *x) {
 	int i;
 	double sum1 = 0.0, sum2 = 0.0;
@@ -214,9 +203,8 @@ double Shifted_Rastrigin(double *x) {
 	sum2 = 10 * MaxGsize + sum1;
 	return sum2;
 }
-//------------------------------------------------------------
+
 // F13 Cigar関数
-//------------------------------------------------------------
 double Cigar(double *x) {
 	int i;
 	double sum;
@@ -225,9 +213,8 @@ double Cigar(double *x) {
 	}
 	return (x[0] * x[0] + sum);
 }
-//------------------------------------------------------------
+
 // F13 2n-minima関数
-//------------------------------------------------------------
 double N2_Minima(double *x) {
 	int i;
 	double sum;
@@ -236,9 +223,8 @@ double N2_Minima(double *x) {
 	}
 	return (sum / 2);
 }
-//------------------------------------------------------------
+
 // 目的関数値を計算
-//------------------------------------------------------------
 double Calc_Objective_Function(double *x)
 {
 	if (FuncNo == 1)return  Sphere(x);
@@ -257,9 +243,8 @@ double Calc_Objective_Function(double *x)
 	else if (FuncNo == 14)return N2_Minima(x);
 	else exit(0);
 }
-//------------------------------------------------------------
+
 //初期個体群の生成
-//------------------------------------------------------------
 void Init_Vector(void)
 {
 	int i, j;		//繰り返し用変数
@@ -277,9 +262,8 @@ void Init_Vector(void)
 		}
 	}
 }
-//------------------------------------------------------------
+
 // 初期集団の評価（目的関数値を適応度として利用）
-//------------------------------------------------------------
 void Evaluate_Init_Vector(void) {
 	int i;
 	for (i = 0; i<MaxPsize; i++) {
@@ -288,9 +272,8 @@ void Evaluate_Init_Vector(void) {
 		pBestFitness[i] = cFitness[i];
 	}
 }
-//------------------------------------------------------------
+
 //新規ベクトルの生成のための親ベクトルの選択
-//------------------------------------------------------------
 void Select_pVector(int pop1)
 {
 	register int i;
@@ -304,9 +287,8 @@ void Select_pVector(int pop1)
 	for (i = 0; i<MaxGsize; i++)pVect2[i] = cVect[pop3][i];
 	for (i = 0; i<MaxGsize; i++)pVect3[i] = cVect[pop4][i];
 }
-//------------------------------------------------------------
+
 //DEの操作
-//------------------------------------------------------------
 void DE_Operation(int pop1)
 {
 	register int i;
@@ -371,16 +353,14 @@ void DE_Operation(int pop1)
 	}
 	else exit(0);
 }
-//------------------------------------------------------------
+
 //新しいベクトルの評価
-//------------------------------------------------------------
 void Evaluate_New_Vector(int pop1)
 {
 	nFitness[pop1] = Calc_Objective_Function(nVect[pop1]);
 }
-//------------------------------------------------------------
+
 //ベクトルの比較
-//------------------------------------------------------------
 void Compare_Vector(void)
 {
 	int i, j;				//繰返し用変数.
@@ -393,9 +373,8 @@ void Compare_Vector(void)
 		else continue;
 	}
 }
-//------------------------------------------------------------
+
 //エリート選択
-//------------------------------------------------------------
 void Select_Elite_Vector(int itime, int gtime)
 {
 	int i;					//繰返し用変数.
@@ -412,9 +391,8 @@ void Select_Elite_Vector(int itime, int gtime)
 	gBestHistory[itime][gtime] = gBestFitness;
 	printf("%20.10lf\n", gBestFitness);
 }
-//------------------------------------------------------------
+
 //ファイル出力1　最良値の推移
-//------------------------------------------------------------
 void Output_To_File1(void)
 {
 	int i, j;					//繰返し用変数.
@@ -436,9 +414,8 @@ void Output_To_File1(void)
 	}
 	fprintf(fp, "\n");
 }
-//------------------------------------------------------------
+
 //集団の多様性の評価
-//------------------------------------------------------------
 void Calc_Diversity(int itime, int gtime)
 {
 	int i, j;					//繰返し用変数.
@@ -468,9 +445,8 @@ void Calc_Diversity(int itime, int gtime)
 	}
 	pDiversity[itime][gtime] = div / MaxPsize;
 }
-//------------------------------------------------------------
+
 //ファイル出力2　分散値の推移
-//------------------------------------------------------------
 void Output_To_File2(void)
 {
 	int i, j;					//繰返し用変数.
@@ -492,9 +468,8 @@ void Output_To_File2(void)
 	}
 	fprintf(fp, "\n");
 }
-//------------------------------------------------------------
+
 //ファイル出力3　最適解発見世代，収束率
-//------------------------------------------------------------
 void Output_To_File3(void)
 {
 	register int i;
@@ -512,9 +487,8 @@ void Output_To_File3(void)
 		fprintf(fp, "%6d %d\n", gTable[i], sRate[i]);
 	}
 }
-//------------------------------------------------------------
+
 //メイン関数
-//------------------------------------------------------------
 int main(void)
 {
 	int episode;
